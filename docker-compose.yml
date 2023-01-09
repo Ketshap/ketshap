@@ -1,0 +1,28 @@
+#-----------------
+# Ketshap Composition
+# Make sure to configure each service that you want kept, for example, modify the environment variables for redis if you plan on
+# having ketshap summon them.
+#-----------------
+
+version: '3.7'
+services:
+  redis:
+    image: redis
+    environment:
+      - "REDIS_PASSWORD="
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --requirepass $${REDIS_PASSWORD:?REDIS_PASSWORD is not configured on the .env file}
+    ports:
+      - "6379:6379"
+    networks:
+      - ketshap
+  node:
+    image: ketshap
+    env_file:
+      - .env
+    networks:
+      - ketshap
+networks:
+  ketshap:

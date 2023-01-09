@@ -1,0 +1,6 @@
+services/
+node_modules/
+dist/
+README.md
+.dockerignore
+.gitignore
