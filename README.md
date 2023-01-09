@@ -56,3 +56,25 @@ docker stack deploy --compose-file docker-compose.yml ketshap
 but before running all of those commands, you should configure the environment first... whoopsies. i should have said that first, but 
 please configure the following environments if you plan on self-hosting:
 - `.env`
+
+#### previews 🖼️
+
+you can view actual screenshots of the embeds here.
+<details>
+  <summary>repository</summary>
+  
+  ![image](https://user-images.githubusercontent.com/69381903/211410016-98a5afa1-cf52-4c6f-b4ca-ec8f802f3ae5.png)
+
+</details>
+<details>
+  <summary>issue</summary>
+  
+  ![image](https://user-images.githubusercontent.com/69381903/211409947-a4addceb-18a5-454d-a047-bc8179fd68c2.png)
+
+</details>
+<details>
+  <summary>pull request</summary>
+  
+  ![image](https://user-images.githubusercontent.com/69381903/211409913-3caf10f2-af05-4b54-b53b-f5c43f93438e.png)
+
+</details>
