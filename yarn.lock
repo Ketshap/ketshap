@@ -477,11 +477,6 @@ lru_map@^0.3.3:
   resolved "https://registry.yarnpkg.com/lru_map/-/lru_map-0.3.3.tgz#b5c8351b9464cbd750335a79650a0ec0e56118dd"
   integrity sha512-Pn9cox5CsMYngeDbmChANltQl+5pi6XmTrraMSzhPmMBbmgcxmqWry0U3PGapCU1yB4/LqCcom7qhHZiF/jGfQ==
 
-mongoose-long@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/mongoose-long/-/mongoose-long-0.6.0.tgz#21f34051206b0f47cf7973136cfc30f6f4d76b88"
-  integrity sha512-yfniuvlo5vWMw6cV2xPVNhaxg/lgTxSXXFGI99HD3vK2fnZ0xwHJ0rzrRoYSsKwK+JFhhCciH54urY/HR9b4hg==
-
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
