@@ -4,6 +4,7 @@ import {GitHubUtils} from "../../utils/github.js";
 import {logger} from "../../logger/winston.js";
 import {StringUtil} from "../../utils/string.js";
 import {DiscordUtils} from "../../utils/discord.js";
+import * as Sentry from '@sentry/node';
 
 export const Issues: KetshapEmbed = {
     name: 'issue',
@@ -71,8 +72,9 @@ async function on(message: Message, match: RegExpMatchArray) {
             .toJSON()
     } catch (ex) {
         // @ts-ignore
-        if (ex.status != null && ex.status !== 404) {
+        if (ex.status == null || ex.status !== 404) {
             console.error(ex)
+            Sentry.captureException(ex)
         } else {
             logger.info('Attempt to request issue %s failed due to the issue not existing.', { owner: matched.owner, repo: matched.repo, issue: matched.issue })
         }

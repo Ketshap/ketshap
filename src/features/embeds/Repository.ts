@@ -3,6 +3,7 @@ import {EmbedBuilder, Message, APIEmbed} from "discord.js";
 import {GitHubUtils} from "../../utils/github.js";
 import {logger} from "../../logger/winston.js";
 import {DiscordUtils} from "../../utils/discord.js";
+import * as Sentry from "@sentry/node";
 
 export const Repository: KetshapEmbed = {
     name: 'repository',
@@ -52,8 +53,9 @@ async function on(message: Message, match: RegExpMatchArray) {
             .toJSON()
     } catch (ex) {
         // @ts-ignore
-        if (ex.status != null && ex.status !== 404) {
+        if (ex.status == null || ex.status !== 404) {
             console.error(ex)
+            Sentry.captureException(ex)
         } else {
             logger.info('Attempt to request repository %s failed due to the repository not existing.', { owner: repo.owner, repo: repo.repo })
         }

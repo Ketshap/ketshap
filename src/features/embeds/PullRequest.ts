@@ -4,6 +4,7 @@ import {GitHubUtils} from "../../utils/github.js";
 import {logger} from "../../logger/winston.js";
 import {StringUtil} from "../../utils/string.js";
 import {DiscordUtils} from "../../utils/discord.js";
+import * as Sentry from "@sentry/node";
 
 export const PullRequest: KetshapEmbed = {
     name: 'pull_request',
@@ -73,8 +74,9 @@ async function on(message: Message, match: RegExpMatchArray) {
             .toJSON()
     } catch (ex) {
         // @ts-ignore
-        if (ex.status != null && ex.status !== 404) {
+        if (ex.status == null || ex.status !== 404) {
             console.error(ex)
+            Sentry.captureException(ex)
         } else {
             logger.info('Attempt to request pull request %s failed due to the pull request not existing.', { owner: matched.owner, repo: matched.repo, pull: matched.pull })
         }
