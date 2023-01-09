@@ -15,6 +15,9 @@ and the following are planned to be added next:
 eventually, i plan on being able to automate transferring of large code texts that are automatically converted by discord into 
 gist links to make the life of mobile users much easier.
 
+you can add me by clicking [here](https://discord.com/api/oauth2/authorize?client_id=1062043878280142848&permissions=412317248576&scope=bot%20applications.commands) if you don't want 
+to self-host the bot yourself.
+
 #### protection 💭
 
 to protect servers from being spammed, there are a few key limits placed into each embed or message:
