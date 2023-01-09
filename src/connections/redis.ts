@@ -2,6 +2,7 @@ import {Module} from "./types/module.js";
 import {needs} from "../utils/env.js";
 import { createClient } from 'redis'
 import {logger} from "../logger/winston.js";
+import * as Sentry from '@sentry/node';
 
 export let redis = createClient()
 export const Redis: Module = {
@@ -9,6 +10,12 @@ export const Redis: Module = {
     init: async () => {
         const { REDIS_URL } = needs('REDIS_URL') as { REDIS_URL: string }
         redis = createClient({ url: REDIS_URL })
+        redis.on('error', (err) => {
+            logger.error('An error occurred from Redis.')
+            console.error(err)
+
+            Sentry.captureException(err)
+        })
         await redis.connect()
     }
 }
