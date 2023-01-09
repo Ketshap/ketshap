@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import {logger} from "./logger/winston.js";
 import {needs} from "./utils/env.js";
-import {ClusterManager} from "discord-hybrid-sharding";
+import {ClusterManager, HeartbeatManager} from "discord-hybrid-sharding";
 import {fileURLToPath} from 'url';
 import * as path from "path";
 dotenv.config()
@@ -19,6 +19,13 @@ async function main() {
         mode: 'process',
         token: DISCORD_TOKEN
     })
+
+    manager.extend(
+        new HeartbeatManager({
+            interval: 5000,
+            maxMissedHeartbeats: 5
+        })
+    )
 
     manager.on('clusterCreate', cluster => logger.info('Cluster %d has been launched.', cluster.id))
     await manager.spawn({timeout: -1})
