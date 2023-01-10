@@ -7,6 +7,7 @@ const FIVE_MINUTES_IN_SECONDS = 5 * 60
 
 export const GitHubUtils = {
     pullImage: (owner: string, repo: string, pull: number): string => `https://opengraph.githubassets.com/${StringUtil.random(8)}/${owner}/${repo}/pull/${pull}`,
+    commitImage: (owner: string, repo: string, commit_hash: string): string => `https://opengraph.githubassets.com/${StringUtil.random(8)}/${owner}/${repo}/commit/${commit_hash}`,
     issueImage: (owner: string, repo: string, issue: number): string => `https://opengraph.githubassets.com/${StringUtil.random(8)}/${owner}/${repo}/issues/${issue}`,
     requestImage: async (owner: string, repo: string): Promise<string | null> =>
         (await fromCacheOtherwise(`image:${repo}:${owner}`, 24 * 60 * 60, async () => {
@@ -28,9 +29,21 @@ export const GitHubUtils = {
         await fromCacheOtherwise(`comment:${repo}:${owner}:${comment_number}`, FIVE_MINUTES_IN_SECONDS, async () => {
             return (await octokit.issues.getComment({ repo: repo, owner: owner, comment_id: comment_number }))?.data
         }),
+    requestCommitComment: async (owner: string, repo: string, comment_number: number): Promise<CachedResult<CommitComment | null>> =>
+        await fromCacheOtherwise(`commit_comment:${repo}:${owner}:${comment_number}`, FIVE_MINUTES_IN_SECONDS, async () => {
+            return (await octokit.repos.getCommitComment({ repo: repo, owner: owner, comment_id: comment_number }))?.data
+        }),
     requestIssue: async (owner: string, repo: string, issue_number: number): Promise<CachedResult<Issue | null>> =>
         await fromCacheOtherwise(`issue:${repo}:${owner}:${issue_number}`, FIVE_MINUTES_IN_SECONDS, async () => {
             return (await octokit.issues.get({ repo: repo, owner: owner, issue_number: issue_number }))?.data
+        }),
+    requestCommit: async (owner: string, repo: string, commit_hash: string): Promise<CachedResult<Commit | null>> =>
+        await fromCacheOtherwise(`commit:${repo}:${owner}:${commit_hash}`, FIVE_MINUTES_IN_SECONDS, async () => {
+            return (await octokit.repos.getCommit({ repo: repo, owner: owner, ref: commit_hash }))?.data
+        }),
+    requestReviewComment: async (owner: string, repo: string, commit_hash: string): Promise<CachedResult<Commit | null>> =>
+        await fromCacheOtherwise(`commit:${repo}:${owner}:${commit_hash}`, FIVE_MINUTES_IN_SECONDS, async () => {
+            return (await octokit.repos.getCommit({ repo: repo, owner: owner, ref: commit_hash }))?.data
         })
 }
 
@@ -39,3 +52,5 @@ export type Repository = GetResponseDataTypeFromEndpointMethod<typeof octokit.re
 export type PullRequest = GetResponseDataTypeFromEndpointMethod<typeof octokit.pulls.get>
 export type Comment = GetResponseDataTypeFromEndpointMethod<typeof octokit.issues.getComment>
 export type Issue = GetResponseDataTypeFromEndpointMethod<typeof octokit.issues.get>
+export type Commit = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getCommit>
+export type CommitComment = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getCommitComment>

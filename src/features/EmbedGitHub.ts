@@ -4,6 +4,7 @@ import {Repository} from "./embeds/Repository.js";
 import {logger} from "../logger/winston.js";
 import {PullRequest} from "./embeds/PullRequest.js";
 import {Issues} from "./embeds/Issue.js";
+import {Commit} from "./embeds/Commit.js";
 
 export const EmbedGitHub: DiscordFeature = {
     name: 'embed-github',
@@ -18,7 +19,7 @@ export type KetshapEmbed = {
 
 const URL_REGEX = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gm
 
-const embeds: KetshapEmbed[] = [Repository, PullRequest, Issues]
+const embeds: KetshapEmbed[] = [Repository, PullRequest, Issues, Commit]
 
 async function on(message: Message) {
     if (message.author.bot) return
