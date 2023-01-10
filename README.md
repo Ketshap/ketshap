@@ -6,13 +6,12 @@ discord server because i will make all github embeds more detailed!
 currently, the following features of github are supported:
 - [x] repositories
 - [x] pull requests
+- [x] commits
 - [x] issues
-- [x] comments (issues and pull requests)
+- [x] comments (issues, commits and pull requests)
 
 and the following are planned to be added next:
 - [ ] review comments
-- [ ] commits
-- [ ] commit comments
 - [ ] users
 - [ ] gists
 
@@ -92,5 +91,11 @@ you can view actual screenshots of the embeds here.
   <summary>pull request comments</summary>
   
   ![image](https://user-images.githubusercontent.com/69381903/211470903-2c4a1157-ed19-43d9-afca-6529d6472c34.png)
+
+</details>
+<details>
+  <summary>commit & commit comments</summary>
+  
+  ![image](https://user-images.githubusercontent.com/69381903/211481484-c168b559-5da0-4f78-8553-27470df0a157.png)
 
 </details>
