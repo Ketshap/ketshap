@@ -43,11 +43,11 @@ async function on(message: Message, match: RegExpMatchArray) {
         }
 
         let descriptionArray = [
-            `**[${commit.commit.message.slice(0, 72)}](${commit.html_url})**`,
+            `**[${commit.commit.message.slice(0, 74)}](${commit.html_url})**`,
         ]
 
-        if (commit.commit.message.length > 72) {
-            descriptionArray = [...descriptionArray, StringUtil.limit(commit.commit.message.slice(72), 360)]
+        if (commit.commit.message.length > 74) {
+            descriptionArray = [...descriptionArray, StringUtil.limit(commit.commit.message.slice(74), 360)]
         }
 
         if (commit.commit.verification != null && commit.commit.verification.verified) {
