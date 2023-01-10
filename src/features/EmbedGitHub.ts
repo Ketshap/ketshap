@@ -30,9 +30,12 @@ async function on(message: Message) {
     let matched = 0
 
     for (const url of urls) {
+        const link = new URL(url[0])
+        let uri = url[0].replace('?' + link.searchParams.toString(), '')
+
         for(const embed of embeds) {
-            logger.info('Checking if %s matches with module [%s]', url[0], embed.name)
-            const match = embed.regex.exec(url[0])
+            logger.info('Checking if %s matches with module [%s]', uri, embed.name)
+            const match = embed.regex.exec(uri)
             if (match != null) {
                 matched += 1;
                 // IMPORTANT: Maximum of five embeds per message only to prevent spamming.
