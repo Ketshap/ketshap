@@ -7,8 +7,12 @@ currently, the following features of github are supported:
 - [x] repositories
 - [x] pull requests
 - [x] issues
+- [x] comments (issues and pull requests)
 
 and the following are planned to be added next:
+- [ ] review comments
+- [ ] commits
+- [ ] commit comments
 - [ ] users
 - [ ] gists
 
@@ -69,12 +73,24 @@ you can view actual screenshots of the embeds here.
 <details>
   <summary>issue</summary>
   
-  ![image](https://user-images.githubusercontent.com/69381903/211409947-a4addceb-18a5-454d-a047-bc8179fd68c2.png)
+  ![image](https://user-images.githubusercontent.com/69381903/211470821-676ceb03-2813-425e-a018-460dc799dac8.png)
+
+</details>
+<details>
+  <summary>issue comments</summary>
+  
+  ![image](https://user-images.githubusercontent.com/69381903/211470875-95b844ea-4cc6-468d-8769-09b2239c4d4f.png)
 
 </details>
 <details>
   <summary>pull request</summary>
   
   ![image](https://user-images.githubusercontent.com/69381903/211409913-3caf10f2-af05-4b54-b53b-f5c43f93438e.png)
+
+</details>
+<details>
+  <summary>pull request comments</summary>
+  
+  ![image](https://user-images.githubusercontent.com/69381903/211470903-2c4a1157-ed19-43d9-afca-6529d6472c34.png)
 
 </details>
