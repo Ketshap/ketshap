@@ -5,20 +5,26 @@ import {logger} from "../../logger/winston.js";
 import {StringUtil} from "../../utils/string.js";
 import {DiscordUtils} from "../../utils/discord.js";
 import * as Sentry from "@sentry/node";
+import {includeComment} from "./Comment.js";
 
 export const PullRequest: KetshapEmbed = {
     name: 'pull_request',
-    regex: /^https:\/\/github\.com\/(?<owner>[a-zA-z-_.]+)\/(?<repo>[a-zA-z-_.]+)\/pull\/(?<pull>\d+)\/?$/,
+    regex: /^https:\/\/github\.com\/(?<owner>[a-zA-z-_.0-9]+)\/(?<repo>[a-zA-z-_.0-9]+)\/pull\/(?<pull>\d+)(?:#issuecomment-(?<comment>\d+))?\/?$/,
     on: on
 }
 
 async function on(message: Message, match: RegExpMatchArray) {
-    const matched = { owner: match.groups!['owner'], repo: match.groups!['repo'], pull: Number.parseInt(match.groups!['pull']) }
+    const matched = {
+        owner: match.groups!['owner'],
+        repo: match.groups!['repo'],
+        pull: Number.parseInt(match.groups!['pull']),
+        comment: match.groups!['comment']
+    }
 
     logger.info('Attempting to request pull request %s', matched)
     try {
         const result = await GitHubUtils.requestPull(matched.owner, matched.repo, matched.pull)
-        const [cached, pullRequest] = [result.cached, result.data]
+        const [isCached, pullRequest] = [result.cached, result.data]
         if (pullRequest == null) {
             return null
         }
@@ -57,8 +63,7 @@ async function on(message: Message, match: RegExpMatchArray) {
             details = [...details, `**Labels**: ${pullRequest.labels.map((label) => label.name).join(', ')}`]
         }
 
-        return embed
-            .setDescription(description)
+        embed
             .addFields({
                 name: 'Statistics',
                 value: statistics.join('\n'),
@@ -69,7 +74,17 @@ async function on(message: Message, match: RegExpMatchArray) {
                 value: details.join('\n'),
                 inline: true
             })
-            .setFooter(DiscordUtils.cachedFooter(cached))
+
+        if (matched.comment != null) {
+            const comment = await includeComment(matched.owner, matched.repo, Number.parseInt(matched.comment), pullRequest.title)
+            if (comment.description !== '') {
+                description = comment.description
+            }
+        }
+
+        return embed
+            .setDescription(description)
+            .setFooter(DiscordUtils.cachedFooter(isCached))
             .setTimestamp(new Date())
             .toJSON()
     } catch (ex) {

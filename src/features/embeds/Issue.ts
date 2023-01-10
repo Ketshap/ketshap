@@ -5,15 +5,21 @@ import {logger} from "../../logger/winston.js";
 import {StringUtil} from "../../utils/string.js";
 import {DiscordUtils} from "../../utils/discord.js";
 import * as Sentry from '@sentry/node';
+import {includeComment} from "./Comment.js";
 
 export const Issues: KetshapEmbed = {
     name: 'issue',
-    regex: /^https:\/\/github\.com\/(?<owner>[a-zA-z-_.]+)\/(?<repo>[a-zA-z-_.]+)\/issues\/(?<issue>\d+)\/?$/,
+    regex: /^https:\/\/github\.com\/(?<owner>[a-zA-z-_.0-9]+)\/(?<repo>[a-zA-z-_.0-9]+)\/issues\/(?<issue>\d+)(?:#issuecomment-(?<comment>\d+))?\/?$/,
     on: on
 }
 
 async function on(message: Message, match: RegExpMatchArray) {
-    const matched = { owner: match.groups!['owner'], repo: match.groups!['repo'], issue: Number.parseInt(match.groups!['issue']) }
+    const matched = {
+        owner: match.groups!['owner'],
+        repo: match.groups!['repo'],
+        issue: Number.parseInt(match.groups!['issue']),
+        comment: match.groups!['comment']
+    }
 
     logger.info('Attempting to request issue %s', matched)
     try {
@@ -32,14 +38,11 @@ async function on(message: Message, match: RegExpMatchArray) {
              body ?? 'No description for this issue.'
         ].join('\n')
 
-        let statistics = [
-            `**Comments**: ${issue.comments}`
-        ]
-
         let assignees = issue.assignees?.slice(0, 15).map((assignee) => `[${assignee.login}](${assignee.html_url})`).join(',') ?? 'No assignees'
         let details = [
             `**Assignees:** ${assignees}`,
-            `**Closed**: ${issue.closed_at != null ? 'Yes' : 'No'}`
+            `**Closed**: ${issue.closed_at != null ? 'Yes' : 'No'}`,
+            `**Comments**: ${issue.comments}`,
         ]
 
         if (issue.closed_by != null) {
@@ -55,13 +58,19 @@ async function on(message: Message, match: RegExpMatchArray) {
             details = [...details, `**Labels**: ${issue.labels.map((label) => label instanceof String ? label : (label.name ?? 'Unknown')).join(', ')}`]
         }
 
+        if (issue.pull_request != null) {
+            details = [...details, `**Linked Pull Request**: ${issue.pull_request.html_url}`]
+        }
+
+        if (matched.comment != null) {
+            const comment = await includeComment(matched.owner, matched.repo, Number.parseInt(matched.comment), issue.title)
+            if (comment.description !== '') {
+                description = comment.description
+            }
+        }
+
         return embed
             .setDescription(description)
-            .addFields({
-                name: 'Statistics',
-                value: statistics.join('\n'),
-                inline: true
-            })
             .addFields({
                 name: 'Details',
                 value: details.join('\n'),

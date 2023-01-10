@@ -22,6 +22,10 @@ export const GitHubUtils = {
         await fromCacheOtherwise(`pull:${repo}:${owner}:${pull_number}`, 10 * 60, async () => {
             return (await octokit.pulls.get({ repo: repo, owner: owner, pull_number: pull_number }))?.data
         }),
+    requestIssueComment: async (owner: string, repo: string, comment_number: number): Promise<CachedResult<Comment | null>> =>
+        await fromCacheOtherwise(`comment:${repo}:${owner}:${comment_number}`, 10 * 60, async () => {
+            return (await octokit.issues.getComment({ repo: repo, owner: owner, comment_id: comment_number }))?.data
+        }),
     requestIssue: async (owner: string, repo: string, issue_number: number): Promise<CachedResult<Issue | null>> =>
         await fromCacheOtherwise(`issue:${repo}:${owner}:${issue_number}`, 10 * 60, async () => {
             return (await octokit.issues.get({ repo: repo, owner: owner, issue_number: issue_number }))?.data
@@ -31,4 +35,5 @@ export const GitHubUtils = {
 export type RepositoryImage = { repository: { openGraphImageUrl: string } }
 export type Repository = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.get>
 export type PullRequest = GetResponseDataTypeFromEndpointMethod<typeof octokit.pulls.get>
+export type Comment = GetResponseDataTypeFromEndpointMethod<typeof octokit.issues.getComment>
 export type Issue = GetResponseDataTypeFromEndpointMethod<typeof octokit.issues.get>

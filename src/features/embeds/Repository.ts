@@ -7,7 +7,7 @@ import * as Sentry from "@sentry/node";
 
 export const Repository: KetshapEmbed = {
     name: 'repository',
-    regex: /^https:\/\/github\.com\/(?<owner>[a-zA-z-_.]+)\/(?<repo>[a-zA-z-_.]+)\/?$/,
+    regex: /^https:\/\/github\.com\/(?<owner>[a-zA-z-_.0-9]+)\/(?<repo>[a-zA-z-_.0-9]+)\/?$/,
     on: on
 }
 
