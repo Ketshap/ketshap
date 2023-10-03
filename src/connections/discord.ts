@@ -16,9 +16,18 @@ export const discord: Client = new Client({
     ],
     makeCache: Options.cacheWithLimits({
         ...Options.DefaultMakeCacheSettings,
-        UserManager: { maxSize: 50 },
-        GuildMemberManager: {maxSize: 50}
+        UserManager: 0,
+        GuildMemberManager: 0,
+        GuildBanManager: 0,
+        PresenceManager: 0,
     }),
+    sweepers: {
+        ...Options.DefaultSweeperSettings,
+        messages: {
+            interval: 120,
+            lifetime: 60,
+        },
+    },
     shards: getInfo().SHARD_LIST,
     shardCount: getInfo().TOTAL_SHARDS
 })

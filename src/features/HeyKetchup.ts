@@ -8,7 +8,7 @@ export const HeyKetchup: DiscordFeature = {
 
 async function on(message: Message) {
     if (message.content === '<@' + message.client.user.id + '>' || message.content === '<@#' + message.client.user.id + '>' ) {
-        message.reply({
+        await message.reply({
             content: '',
             embeds: [
                 {
